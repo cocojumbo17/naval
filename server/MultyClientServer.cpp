@@ -145,7 +145,7 @@ void MultyClientServer::DisconnectClient(ClientData& current_client)
 	// Declare a variable to store the disconnect message into
 	char raw_data[BUFFER_SIZE];
 	// Parse in the client data to send
-	sprintf_s(raw_data, "~4 %s", current_client.m_screen_name);
+//	sprintf_s(raw_data, "~4 %s", current_client.m_screen_name);
 	// Echo out the disconnect message so all clients drop this client
 	EchoMessage(raw_data);
 	std::cout << "Disconnecting client[]" << std::endl;
@@ -194,15 +194,15 @@ void MultyClientServer::ReceiveData()
 						// Parse out the 'Add Client' command
 						Midcopy(buffer, raw_data, 3, strlen(buffer));
 						// Store the client information into our RAM client database
-						sscanf_s(raw_data, "%s %s %s", m_clients[j].m_template_name, (unsigned)_countof(m_clients[j].m_template_name),
-														m_clients[j].m_screen_name, (unsigned)_countof(m_clients[j].m_screen_name), 
-														m_clients[j].m_siegepos, (unsigned)_countof(m_clients[j].m_siegepos));
+//						sscanf_s(raw_data, "%s %s %s", m_clients[j].m_template_name, (unsigned)_countof(m_clients[j].m_template_name),
+//														m_clients[j].m_screen_name, (unsigned)_countof(m_clients[j].m_screen_name), 
+//														m_clients[j].m_siegepos, (unsigned)_countof(m_clients[j].m_siegepos));
 						for (int k = 0; k < m_max_clients; k++)
 						{
 							if ((m_clients[k].m_connected) && (j != k))
 							{
 								// Parse in the client data to send
-								sprintf_s(raw_data, "~1 %s %s %s", m_clients[k].m_template_name, m_clients[k].m_screen_name, m_clients[k].m_siegepos);
+//								sprintf_s(raw_data, "~1 %s %s %s", m_clients[k].m_template_name, m_clients[k].m_screen_name, m_clients[k].m_siegepos);
 								// Send the client data
 								SendData(m_clients[j], raw_data, BUFFER_SIZE);
 							}
@@ -215,8 +215,8 @@ void MultyClientServer::ReceiveData()
 						// Parse out the 'Move Client' command
 						Midcopy(buffer, raw_data, 3, strlen(buffer));
 						// Update the client information into our RAM client database
-						sscanf_s(raw_data, "%s %s", m_clients[j].m_screen_name, (unsigned)_countof(m_clients[j].m_screen_name),
-							m_clients[j].m_siegepos, (unsigned)_countof(m_clients[j].m_siegepos));
+//						sscanf_s(raw_data, "%s %s", m_clients[j].m_screen_name, (unsigned)_countof(m_clients[j].m_screen_name),
+//							m_clients[j].m_siegepos, (unsigned)_countof(m_clients[j].m_siegepos));
 					}
 					else if (buffer[1] == '3') // Chat Client Command
 					{

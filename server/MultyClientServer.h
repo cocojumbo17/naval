@@ -4,15 +4,15 @@
 
 struct ClientData
 {
-	ClientData():m_connected(false){};
+	ClientData():m_connected(false), m_game_id(-1){};
 	bool		m_connected;
+	bool		m_ready_for_game;
+	int			m_game_id;
+	char		m_player_name[15];
 	sockaddr_in	m_address;
 	SOCKET		m_socket;
 	fd_set		m_socket_data;
 	int			m_result_op;
-	char		m_template_name[15];
-	char		m_screen_name[15];
-	char		m_siegepos[45];
 };
 
 class MultyClientServer
