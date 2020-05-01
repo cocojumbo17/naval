@@ -1,14 +1,14 @@
 #include "RequestParser.h"
 #include <iostream>
 
-#define PACKTOSTRING_BEGIN(COMMAND_NAME) \
+#define PackToXML_BEGIN(COMMAND_NAME) \
 	tinyxml2::XMLDocument doc;\
 	tinyxml2::XMLElement* root = doc.NewElement("request");\
 	doc.LinkEndChild(root);\
 	root->SetAttribute("command", (COMMAND_NAME));\
 	tinyxml2::XMLElement* data = root->InsertNewChildElement("command_data");
 
-#define PACKTOSTRING_END \
+#define PackToXML_END \
 	tinyxml2::XMLPrinter printer;\
 	doc.Print(&printer);\
 	return printer.CStr();
@@ -19,7 +19,7 @@ bool IRequestImpl::UnpackFromXML(tinyxml2::XMLDocument & doc)
 	throw std::exception("this method is not implemented.");
 }
 
-REQUEST_ID IRequestImpl::GetCommandID()
+Request_ID IRequestImpl::GetCommandID()
 {
 	throw std::exception("this method is not implemented.");
 }
@@ -39,7 +39,7 @@ int IRequestImpl::GetGameID()
 	throw std::exception("this method is not implemented.");
 }
 
-std::string IRequestImpl::PackToString()
+std::string IRequestImpl::PackToXML()
 {
 	throw std::exception("this method is not implemented.");
 }
@@ -59,9 +59,9 @@ std::pair<int, int> IRequestImpl::GetShotPos()
 	throw std::exception("this method is not implemented.");
 }
 //--------------------------------------------------------
-REQUEST_ID ErrorRequest::GetCommandID()
+Request_ID ErrorRequest::GetCommandID()
 {
-	return REQUEST_ID::RQ_ERROR;
+	return Request_ID::RQ_ERROR;
 }
 
 bool ErrorRequest::UnpackFromXML(tinyxml2::XMLDocument& doc)
@@ -81,9 +81,9 @@ RegisterRequest::RegisterRequest(const std::string& player, PLAYER_LEVEL my_leve
 {
 }
 
-REQUEST_ID RegisterRequest::GetCommandID()
+Request_ID RegisterRequest::GetCommandID()
 {
-	return REQUEST_ID::RQ_REGISTER;
+	return Request_ID::RQ_REGISTER;
 }
 
 std::string RegisterRequest::GetPlayerName()
@@ -95,12 +95,12 @@ PLAYER_LEVEL RegisterRequest::GetLevel()
 	return m_my_level;
 }
 
-std::string RegisterRequest::PackToString()
+std::string RegisterRequest::PackToXML()
 {
-	PACKTOSTRING_BEGIN("REGISTER")
+	PackToXML_BEGIN("REGISTER")
 	data->SetAttribute("player_name", m_player.c_str());
 	data->SetAttribute("player_level", (int)m_my_level);
-	PACKTOSTRING_END
+	PackToXML_END
 }
 
 bool RegisterRequest::UnpackFromXML(tinyxml2::XMLDocument& doc)
@@ -125,9 +125,9 @@ StartGameRequest::StartGameRequest(int player_id, PLAYER_LEVEL opponent_level)
 	, m_opponent_level(opponent_level)
 {}
 
-REQUEST_ID StartGameRequest::GetCommandID()
+Request_ID StartGameRequest::GetCommandID()
 {
-	return REQUEST_ID::RQ_START_GAME;
+	return Request_ID::RQ_START_GAME;
 }
 
 int StartGameRequest::GetPlayerID()
@@ -135,12 +135,12 @@ int StartGameRequest::GetPlayerID()
 	return m_player_id;
 }
 
-std::string StartGameRequest::PackToString()
+std::string StartGameRequest::PackToXML()
 {
-	PACKTOSTRING_BEGIN("START_GAME")
+	PackToXML_BEGIN("START_GAME")
 	data->SetAttribute("player_id", m_player_id);
 	data->SetAttribute("opponent_level", (int)m_opponent_level);
-	PACKTOSTRING_END
+	PackToXML_END
 }
 
 bool StartGameRequest::UnpackFromXML(tinyxml2::XMLDocument& doc)
@@ -171,9 +171,9 @@ GetFieldRequest::GetFieldRequest(int player_id, int game_id)
 , m_game_id(game_id)
 {}
 
-REQUEST_ID GetFieldRequest::GetCommandID()
+Request_ID GetFieldRequest::GetCommandID()
 {
-	return REQUEST_ID::RQ_GET_FIELD;
+	return Request_ID::RQ_GET_FIELD;
 }
 
 int GetFieldRequest::GetPlayerID()
@@ -186,12 +186,12 @@ int GetFieldRequest::GetGameID()
 	return m_game_id;
 }
 
-std::string GetFieldRequest::PackToString()
+std::string GetFieldRequest::PackToXML()
 {
-	PACKTOSTRING_BEGIN("GET_FIELD")
+	PackToXML_BEGIN("GET_FIELD")
 	data->SetAttribute("player_id", m_player_id);
 	data->SetAttribute("game_id", m_game_id);
-	PACKTOSTRING_END
+	PackToXML_END
 }
 
 bool GetFieldRequest::UnpackFromXML(tinyxml2::XMLDocument& doc)
@@ -221,9 +221,9 @@ MakeShotRequest::MakeShotRequest(int player_id, int game_id, int ver, int hor)
 {}
 
 
-REQUEST_ID MakeShotRequest::GetCommandID()
+Request_ID MakeShotRequest::GetCommandID()
 {
-	return REQUEST_ID::RQ_MAKE_SHOT;
+	return Request_ID::RQ_MAKE_SHOT;
 }
 
 int MakeShotRequest::GetPlayerID()
@@ -236,14 +236,14 @@ int MakeShotRequest::GetGameID()
 	return m_game_id;
 }
 
-std::string MakeShotRequest::PackToString()
+std::string MakeShotRequest::PackToXML()
 {
-	PACKTOSTRING_BEGIN("MAKE_SHOT")
+	PackToXML_BEGIN("MAKE_SHOT")
 	data->SetAttribute("player_id", m_player_id);
 	data->SetAttribute("game_id", m_game_id);
 	data->SetAttribute("shot_ver", m_ver);
 	data->SetAttribute("shot_hor", m_hor);
-	PACKTOSTRING_END
+	PackToXML_END
 }
 
 bool MakeShotRequest::UnpackFromXML(tinyxml2::XMLDocument& doc)
@@ -292,11 +292,11 @@ IRequestPtr RequestParser::Parse(const std::string& str)
 
 std::string RequestParser::Pack(IRequestPtr command)
 {
-	return command->PackToString();
+	return command->PackToXML();
 }
 
 #ifdef _TEST
-namespace test
+namespace RequestTest
 {
 	bool __test1(void)
 	{
@@ -331,10 +331,11 @@ namespace test
 	{
 		std::string str = "gfsfgsdfg";
 		IRequestPtr rq = RequestParser::Parse(str);
-		return (rq->GetCommandID() == REQUEST_ID::RQ_ERROR);
+		return (rq->GetCommandID() == Request_ID::RQ_ERROR);
 	}
 	int all_tests()
 	{
+		std::cout << "-------- testing of RequestParser --------" << std::endl;
 		std::cout << "test1 is " << (__test1() ? "PASS" : "FAILED") << std::endl;
 		std::cout << "test2 is " << (__test2() ? "PASS" : "FAILED") << std::endl;
 		std::cout << "test3 is " << (__test3() ? "PASS" : "FAILED") << std::endl;

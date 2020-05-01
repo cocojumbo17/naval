@@ -1,6 +1,7 @@
 #include "MultyClientServer.h"
 #include <iostream>
 #include "..\common\common.h"
+#include "../common/RequestParser.h"
 
 
 MultyClientServer::MultyClientServer(int max_clients, int port)
@@ -185,6 +186,8 @@ void MultyClientServer::ReceiveData()
 		{
 			if (ReceiveClient(m_clients[j], buffer, BUFFER_SIZE))
 			{
+				IRequestPtr rq = RequestParser::Parse(buffer);
+				//HandleRequest(rq);
 				if (buffer[0] == '~')
 				{ // All data should be buffered by a '~' just because
 					if (buffer[1] == '1') // Add Client Command

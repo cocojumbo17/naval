@@ -1,5 +1,5 @@
 #pragma once
-#include "IPlayer.h"
+#include "..\common\interfaces.h"
 #include <vector>
 #include <set>
 //----------------------------------------------------------------------

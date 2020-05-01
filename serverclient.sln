@@ -10,8 +10,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{63190669-0D56-4B8F-9C9B-DFEFFDDB8FAC}"
 	ProjectSection(SolutionItems) = preProject
 		common\common.h = common\common.h
+		common\interfaces.h = common\interfaces.h
 		common\RequestParser.cpp = common\RequestParser.cpp
 		common\RequestParser.h = common\RequestParser.h
+		common\ResponseParser.cpp = common\ResponseParser.cpp
+		common\ResponseParser.h = common\ResponseParser.h
 		common\tinyxml2.cpp = common\tinyxml2.cpp
 		common\tinyxml2.h = common\tinyxml2.h
 	EndProjectSection

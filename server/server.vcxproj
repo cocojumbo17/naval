@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\RequestParser.cpp" />
+    <ClCompile Include="..\common\ResponseParser.cpp" />
     <ClCompile Include="..\common\tinyxml2.cpp" />
     <ClCompile Include="MultyClientServer.cpp" />
     <ClCompile Include="server.cpp" />

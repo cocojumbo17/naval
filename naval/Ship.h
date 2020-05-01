@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "ISerialize.h"
+#include "..\common\interfaces.h"
 
 class Ship: public ISerialize
 {
