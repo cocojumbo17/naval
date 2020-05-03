@@ -20,12 +20,15 @@
 #include "MultyClientServer.h"
 #include <iostream>
 #include "..\common\common.h"
+#include <time.h>
 
 #pragma comment (lib, "Ws2_32.lib")
 
 int main()
 {
-	std::cout << "\txmen90s Non-Blocking Multi-Client Echo Server for Dungeon Siege\n" << std::endl;
+	srand((unsigned int)time(NULL));
+
+	std::cout << "\tNaval Server\n" << std::endl;
 	MultyClientServer server(MAX_CLIENTS, PORT);
 	// Initialize winsock and start listening
 	server.StartServer();
@@ -38,6 +41,7 @@ int main()
 		// Receive all data from clients
 		server.ReceiveData();
 		looping = !server.IsFinish();
+		Sleep(10);
 	}
 	// Shut down winsock
 	server.EndServer();

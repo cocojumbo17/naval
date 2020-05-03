@@ -1,35 +1,41 @@
 
-#include "CharClient.h"
+#include "NavalClient.h"
 #include <iostream>
+#include <sstream>
+#include <conio.h>
 #include "..\common\common.h"
+#include <time.h>
+
 #pragma comment (lib, "Ws2_32.lib")
 
 int main()
 {
-	char buffer[BUFFER_SIZE];
-	char name[BUFFER_SIZE];
-	std::cout << "\t\tEcho Client";
-	CharClient client(SERVER_ADRESS, PORT);
-	client.StartClient();
-	std::cout << "My name is:\n>";
-	fgets(name, BUFFER_SIZE, stdin);
-	sprintf_s(buffer, "~1 template_name %s siegepos", name);
-	if (client.SendData(buffer, BUFFER_SIZE))
-		client.ReceiveData(buffer, BUFFER_SIZE);
+	srand((unsigned int)time(NULL));
 
+	//char buffer[BUFFER_SIZE];
+	std::cout << "\t\tNaval Client\n\n";
+	NavalClient client(SERVER_ADRESS, PORT);
+	client.StartClient();
+	client.InitPlayer();
 	bool looping = true;
 	while (looping)
 	{
-		std::cout << "1-listen 2-send message\n>";
-		if (getchar() == '2')
+		char choise;
+		while (true)
 		{
-			fgets(buffer, BUFFER_SIZE, stdin);
-			if (client.SendData(buffer, BUFFER_SIZE))
-				client.ReceiveData(buffer, BUFFER_SIZE);
+			std::cout << "\n0-exit 1-start new game\n>";
+			choise = _getche();
+			int l = choise - '0';
+			if (l >= 0 and l < 2)
+				break;
 		}
+		if (choise == '0')
+			looping = false;
 		else
-			client.ReceiveData(buffer, BUFFER_SIZE);
-		looping = !client.IsFinish();
+		{
+			client.PlayGame();
+			looping = !client.IsFinish();
+		}
 	}
 	client.EndClient();
 	return 0;

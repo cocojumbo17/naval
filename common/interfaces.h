@@ -19,12 +19,14 @@ enum class Response_ID
     RS_START_GAME,
     RS_GET_FIELD,
     RS_MAKE_SHOT,
-    RS_UNDER_ATTACK
+    RS_UNDER_ATTACK,
+    RS_IS_FINISH
 };
 
 enum class PLAYER_LEVEL
 {
     PL_ERROR = 0,
+    PL_ANY,
     PL_HUMAN,
     PL_DUMP,
     PL_LAZY,
@@ -55,6 +57,7 @@ class IPlayer
 public:
     virtual ~IPlayer() {};
     virtual void Init() = 0;
+    virtual std::string GetField() = 0;
     virtual void MakeShot(int& o_ver, int& o_hor) = 0;
     virtual void ResultOfYourShot(int i_ver, int i_hor, AttackResult res) = 0;
     virtual AttackResult AttackYou(int i_ver, int i_hor) = 0;
@@ -95,15 +98,24 @@ public:
     virtual bool IsMyTurn() = 0;
     virtual AttackResult GetAttackResult() = 0;
     virtual std::pair<int, int> GetShotPos() = 0;
+    virtual std::pair<bool, int> IsFinish() = 0;
     virtual std::string PackToString() = 0;
     virtual bool UnpackFromXML(tinyxml2::XMLDocument& doc) = 0;
 };
 
-
-
-
-
 typedef std::shared_ptr<IPlayer> IPlayerPtr;
+
+class IServerGame
+{
+public:
+    virtual ~IServerGame() {};
+    virtual std::string GetField(int player_id) = 0;
+    virtual AttackResult PlayRound(int attacker_id, int deffender_id, int ver, int hor) = 0;
+    virtual bool IsFinish(int& o_winner_id, int& o_looser_id) = 0;
+    virtual void GetStats(int& o_round_played, int& o_decks_left) = 0;
+};
+
 typedef std::shared_ptr<IStrategy> IStrategyPtr;
 typedef std::shared_ptr<IRequest> IRequestPtr;
 typedef std::shared_ptr<IResponse> IResponsePtr;
+typedef std::shared_ptr<IServerGame> IGamePtr;

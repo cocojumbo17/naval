@@ -10,7 +10,9 @@ MultyClientServer::MultyClientServer(int max_clients, int port)
 	, m_clients_connected(0)
 	, m_clients(m_max_clients, ClientData())
 	, m_is_finish(false)
-{	
+{
+	m_db = std::make_shared<DB>();
+	m_request_handler = std::make_shared<RequestHandler>(m_db);
 }
 
 void MultyClientServer::StartServer()
@@ -144,26 +146,15 @@ void MultyClientServer::DisconnectClient(ClientData& current_client)
 	// Decrement the current number of connected clients
 	m_clients_connected--;
 	// Declare a variable to store the disconnect message into
-	char raw_data[BUFFER_SIZE];
+	//char raw_data[BUFFER_SIZE];
 	// Parse in the client data to send
 //	sprintf_s(raw_data, "~4 %s", current_client.m_screen_name);
 	// Echo out the disconnect message so all clients drop this client
-	EchoMessage(raw_data);
+	//EchoMessage(raw_data);
 	std::cout << "Disconnecting client[]" << std::endl;
 }
 
-void MultyClientServer::EchoMessage(char* message)
-{
-	for (int j = 0; j < m_max_clients; ++j)
-	{
-		if (m_clients[j].m_connected)
-		{ // Echo the message to all clients
-			SendData(m_clients[j], message, BUFFER_SIZE);
-		}
-	}
-}
-
-bool MultyClientServer::SendData(ClientData& current_client, char* buffer, int size)
+bool MultyClientServer::SendData(ClientData& current_client, const char* buffer, int size)
 {
 	// Store the return information about the sending
 	current_client.m_result_op = send(current_client.m_socket, buffer, size, 0);
@@ -187,6 +178,10 @@ void MultyClientServer::ReceiveData()
 			if (ReceiveClient(m_clients[j], buffer, BUFFER_SIZE))
 			{
 				IRequestPtr rq = RequestParser::Parse(buffer);
+				m_request_handler->AddRequest(j, rq);
+
+				/*
+
 				//HandleRequest(rq);
 				if (buffer[0] == '~')
 				{ // All data should be buffered by a '~' just because
@@ -242,9 +237,21 @@ void MultyClientServer::ReceiveData()
 					// Clear the buffer
 					buffer[0] = '\0';
 				}
+
+				*/
+
 			}
 		}
 	}
+	m_request_handler->Listen();
+	int client_id;
+	IResponsePtr rs;
+	if (m_request_handler->Answer(client_id, rs))
+	{
+		std::string str = rs->PackToString();
+		SendData(m_clients[client_id], str.c_str(), str.size());
+	}
+
 }
 
 void MultyClientServer::Midcopy(char* input, char* output, int start_pos, int stop_pos)
@@ -271,6 +278,7 @@ int MultyClientServer::ReceiveClient(ClientData& current_client, char* buffer, i
 		}
 		else if (current_client.m_result_op == -1)
 			return false;
+		buffer[current_client.m_result_op] = 0;
 		return true;
 	}
 	return false;

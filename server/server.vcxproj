@@ -154,11 +154,23 @@
     <ClCompile Include="..\common\RequestParser.cpp" />
     <ClCompile Include="..\common\ResponseParser.cpp" />
     <ClCompile Include="..\common\tinyxml2.cpp" />
+    <ClCompile Include="DB.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="MultyClientServer.cpp" />
+    <ClCompile Include="ProxyPlayer.cpp" />
+    <ClCompile Include="RequestHandler.cpp" />
     <ClCompile Include="server.cpp" />
+    <ClCompile Include="Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DB.h" />
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="MultyClientServer.h" />
+    <ClInclude Include="ProxyPlayer.h" />
+    <ClInclude Include="RequestHandler.h" />
+    <ClInclude Include="Ship.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

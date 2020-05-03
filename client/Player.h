@@ -19,6 +19,7 @@ public:
 
 protected:
     FieldPtr m_my_field;
+    FieldPtr m_opponent_field;
     std::string m_name;
     IStrategyPtr mp_strategy;
 };

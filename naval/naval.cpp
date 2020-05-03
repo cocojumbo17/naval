@@ -15,8 +15,8 @@ int main()
 	const int num_games = 1000;
 	int num_win1 = 0, num_win2 = 0;
 	int num_rounds = 0;
-	std::shared_ptr<AdvancedStrategy> strategy1 = std::make_shared<AdvancedStrategy>();
-	std::shared_ptr<AdvancedStrategy> strategy2 = std::make_shared<AdvancedStrategy>();
+	std::shared_ptr<IStrategy> strategy1 = std::make_shared<AdvancedStrategy>();
+	std::shared_ptr<IStrategy> strategy2 = std::make_shared<LazyStrategy>();
 	IPlayerPtr p1 = std::make_shared<Player>("Vasiliy", strategy1);
 	IPlayerPtr p2 = std::make_shared<Player>("Vovan", strategy2);
 

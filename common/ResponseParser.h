@@ -13,6 +13,7 @@ public:
 	virtual bool IsMyTurn() override;
 	virtual AttackResult GetAttackResult() override;
 	virtual std::pair<int, int> GetShotPos() override;
+	virtual std::pair<bool, int> IsFinish() override;
 	virtual std::string PackToString() override;
 	virtual bool UnpackFromXML(tinyxml2::XMLDocument& doc) override;
 };
@@ -78,13 +79,13 @@ public:
 	virtual Response_ID GetCommandID() override;
 	virtual AttackResult GetAttackResult() override;
 	virtual std::pair<int, int> GetShotPos() override;
+	virtual bool IsMyTurn() override;
 	virtual std::string PackToString() override;
 	virtual bool UnpackFromXML(tinyxml2::XMLDocument& doc) override;
 protected:
 	int m_ver;
 	int m_hor;
 	AttackResult m_result;
-
 };
 
 class UnderAttackResponse :public MakeShotResponse
@@ -93,8 +94,24 @@ public:
 	UnderAttackResponse();
 	UnderAttackResponse(int ver, int hor, AttackResult res);
 	// Inherited via IResponse
+	virtual bool IsMyTurn() override;
 	virtual Response_ID GetCommandID() override;
 	virtual std::string PackToString() override;
+};
+
+class IsFinishResponse :public IResponseImpl
+{
+public:
+	IsFinishResponse();
+	IsFinishResponse(bool is_finish, int winner_id);
+	// Inherited via IResponse
+	virtual Response_ID GetCommandID() override;
+	virtual std::pair<bool, int> IsFinish() override;
+	virtual std::string PackToString() override;
+	virtual bool UnpackFromXML(tinyxml2::XMLDocument& doc) override;
+protected:
+	bool m_is_finish;
+	int m_winner_id;
 };
 
 namespace ResponseParser

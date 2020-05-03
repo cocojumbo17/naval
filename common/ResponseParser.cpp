@@ -50,6 +50,11 @@ std::pair<int, int> IResponseImpl::GetShotPos()
 	throw std::exception("this method is not implemented.");
 }
 
+std::pair<bool, int> IResponseImpl::IsFinish()
+{
+	throw std::exception("this method is not implemented.");
+}
+
 std::string IResponseImpl::PackToString()
 {
 	throw std::exception("this method is not implemented.");
@@ -217,6 +222,14 @@ AttackResult MakeShotResponse::GetAttackResult()
 	return m_result;
 }
 
+bool MakeShotResponse::IsMyTurn()
+{
+	bool res = false;
+	if (m_result == AttackResult::AR_INJURED || m_result == AttackResult::AR_SUNK)
+		res = true;
+	return res;
+}
+
 std::string MakeShotResponse::PackToString()
 {
 	PACKTOSTRING_BEGIN("MAKE_SHOT")
@@ -254,6 +267,14 @@ Response_ID UnderAttackResponse::GetCommandID()
 	return Response_ID::RS_UNDER_ATTACK;
 }
 
+bool UnderAttackResponse::IsMyTurn()
+{
+	bool res = true;
+	if (m_result == AttackResult::AR_INJURED || m_result == AttackResult::AR_SUNK)
+		res = false;
+	return res;
+}
+
 std::string UnderAttackResponse::PackToString()
 {
 	PACKTOSTRING_BEGIN("UNDER_ATTACK")
@@ -262,7 +283,41 @@ std::string UnderAttackResponse::PackToString()
 	data->SetAttribute("shot_result", (int)m_result);
 	PACKTOSTRING_END
 }
-
+//--------------------------------------------------------
+IsFinishResponse::IsFinishResponse()
+	:m_is_finish(false)
+	, m_winner_id(-1)
+{}
+IsFinishResponse::IsFinishResponse(bool is_finish, int winner_id)
+	: m_is_finish(is_finish)
+	, m_winner_id(winner_id)
+{}
+Response_ID IsFinishResponse::GetCommandID()
+{
+	return Response_ID::RS_IS_FINISH;
+}
+std::pair<bool, int> IsFinishResponse::IsFinish()
+{
+	return std::make_pair(m_is_finish, m_winner_id);
+}
+std::string IsFinishResponse::PackToString()
+{
+	PACKTOSTRING_BEGIN("IS_FINISHED")
+	data->SetAttribute("is_finish", m_is_finish);
+	data->SetAttribute("winner_id", m_winner_id);
+	PACKTOSTRING_END
+}
+bool IsFinishResponse::UnpackFromXML(tinyxml2::XMLDocument& doc)
+{
+	tinyxml2::XMLElement* p_data = doc.RootElement()->FirstChildElement("command_data");
+	if (p_data)
+	{
+		m_is_finish = p_data->BoolAttribute("is_finish");
+		m_winner_id = p_data->IntAttribute("winner_id");
+		return true;
+	}
+	return false;
+}
 //--------------------------------------------------------
 IResponsePtr ResponseParser::Parse(const std::string& str)
 {
@@ -281,6 +336,8 @@ IResponsePtr ResponseParser::Parse(const std::string& str)
 			p_res = std::make_shared<MakeShotResponse>();
 		else if (cmd && std::string(cmd) == "UNDER_ATTACK")
 			p_res = std::make_shared<UnderAttackResponse>();
+		else if (cmd && std::string(cmd) == "IS_FINISHED")
+			p_res = std::make_shared<IsFinishResponse>();
 		else
 			p_res = std::make_shared<ErrorResponse>();
 		p_res->UnpackFromXML(doc);
@@ -338,6 +395,13 @@ namespace ResponseTest
 		IResponsePtr rq = ResponseParser::Parse(str);
 		return (rq->GetCommandID() == Response_ID::RS_ERROR);
 	}
+	bool __test7(void)
+	{
+		IResponsePtr rq = std::make_shared<IsFinishResponse>(true, 22);
+		std::string str = ResponseParser::Pack(rq);
+		IResponsePtr rq2 = ResponseParser::Parse(str);
+		return (rq->IsFinish() == rq2->IsFinish());
+	}
 	int all_tests()
 	{
 		std::cout << "-------- testing of ResponseParser --------"<< std::endl;
@@ -346,7 +410,8 @@ namespace ResponseTest
 		std::cout << "test3 is " << (__test3() ? "PASS" : "FAILED") << std::endl;
 		std::cout << "test4 is " << (__test4() ? "PASS" : "FAILED") << std::endl;
 		std::cout << "test5 is " << (__test5() ? "PASS" : "FAILED") << std::endl;
-		std::cout << "test5 is " << (__test6() ? "PASS" : "FAILED") << std::endl;
+		std::cout << "test6 is " << (__test6() ? "PASS" : "FAILED") << std::endl;
+		std::cout << "test7 is " << (__test7() ? "PASS" : "FAILED") << std::endl;
 		return 0;
 	}
 	int r=all_tests();

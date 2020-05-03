@@ -1,14 +1,13 @@
 #pragma once
 #include <winsock.h>
 #include <vector>
+#include "DB.h"
+#include "RequestHandler.h"
 
 struct ClientData
 {
-	ClientData():m_connected(false), m_game_id(-1){};
+	ClientData():m_connected(false){};
 	bool		m_connected;
-	bool		m_ready_for_game;
-	int			m_game_id;
-	char		m_player_name[15];
 	sockaddr_in	m_address;
 	SOCKET		m_socket;
 	fd_set		m_socket_data;
@@ -23,12 +22,11 @@ public:
 	bool	AcceptClient(ClientData& current_client);
 	void	AcceptConnections();
 	void	DisconnectClient(ClientData& current_client);
-	void	EchoMessage(char* message);
 	void	EndServer();
 	void	Midcopy(char* input, char* output, int start_pos, int stop_pos);
 	int		ReceiveClient(ClientData& current_client, char* buffer, int size);
 	void	ReceiveData();
-	bool	SendData(ClientData& current_client, char* buffer, int size);
+	bool	SendData(ClientData& current_client, const char* buffer, int size);
 	void	StartServer();
 	bool	IsFinish();
 
@@ -41,5 +39,7 @@ protected:
 	int			m_clients_connected;
 	int			m_port;
 	bool		m_is_finish;
+	DBPtr		m_db;
+	RequestHandlerPtr m_request_handler;
 };
 
