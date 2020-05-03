@@ -151,22 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\game\Field.cpp" />
+    <ClCompile Include="..\common\game\Ship.cpp" />
+    <ClCompile Include="..\common\game\Strategy.cpp" />
     <ClCompile Include="..\common\RequestParser.cpp" />
     <ClCompile Include="..\common\ResponseParser.cpp" />
     <ClCompile Include="..\common\tinyxml2.cpp" />
-    <ClCompile Include="Field.cpp" />
     <ClCompile Include="client.cpp" />
     <ClCompile Include="NavalClient.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Ship.cpp" />
-    <ClCompile Include="Strategy.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Field.h" />
     <ClInclude Include="NavalClient.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Ship.h" />
-    <ClInclude Include="Strategy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

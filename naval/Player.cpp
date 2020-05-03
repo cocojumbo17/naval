@@ -8,6 +8,7 @@ Player::Player(const std::string& name, IStrategyPtr p_strategy)
 	, mp_strategy(p_strategy)
 {
 	m_my_field = std::make_shared<Field>();
+	m_opponent_field = std::make_shared<Field>();
 	Init();
 }
 
@@ -19,6 +20,7 @@ void Player::Init()
 {
 	mp_strategy->Init();
 	m_my_field->Generate();
+	m_opponent_field->Clear();
 }
 
 FieldPtr Player::GetMyField()
@@ -59,6 +61,10 @@ void Player::ResultOfYourShot(int i_ver, int i_hor, AttackResult res)
 	}
 	std::cout << std::endl;
 	*/
+	if (res == AttackResult::AR_INJURED || res == AttackResult::AR_SUNK)
+		m_opponent_field->AttackToDeck(i_ver, i_hor);
+	else
+		m_opponent_field->Attack(i_ver, i_hor);
 	mp_strategy->Correct(i_ver, i_hor, res);
 }
 

@@ -1,9 +1,10 @@
 #pragma once
 #include <map>
-#include "..\common\interfaces.h"
+#include "..\interfaces.h"
 
 class Ship: public ISerialize
 {
+	friend class Field;
 public:
 	Ship();
 	virtual ~Ship();

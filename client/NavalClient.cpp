@@ -4,7 +4,7 @@
 #include "../common/common.h"
 #include "../common/interfaces.h"
 #include <conio.h>
-#include "Strategy.h"
+#include "..\common\game\Strategy.h"
 #include "Player.h"
 
 char g_buffer[BUFFER_SIZE];

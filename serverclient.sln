@@ -21,6 +21,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{631906
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "naval", "naval\naval.vcxproj", "{F5BE935C-AE9A-4D6C-91EC-2B8DDBB02E16}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "game", "game", "{B8D1FB1F-FF21-4393-92A3-C2929708F13D}"
+	ProjectSection(SolutionItems) = preProject
+		common\game\Field.cpp = common\game\Field.cpp
+		common\game\Field.h = common\game\Field.h
+		common\game\Ship.cpp = common\game\Ship.cpp
+		common\game\Ship.h = common\game\Ship.h
+		common\game\Strategy.cpp = common\game\Strategy.cpp
+		common\game\Strategy.h = common\game\Strategy.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -56,6 +66,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8D1FB1F-FF21-4393-92A3-C2929708F13D} = {63190669-0D56-4B8F-9C9B-DFEFFDDB8FAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3DAF841-E682-448A-B34A-0547CC96244A}

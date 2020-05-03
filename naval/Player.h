@@ -1,6 +1,6 @@
 #pragma once
 #include "..\common\interfaces.h"
-#include "Field.h"
+#include "..\common\game\Field.h"
 
 class Player : public IPlayer
 {
@@ -19,6 +19,7 @@ public:
 
 protected:
     FieldPtr m_my_field;
+    FieldPtr m_opponent_field;
     std::string m_name;
     IStrategyPtr mp_strategy;
 };

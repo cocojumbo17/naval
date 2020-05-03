@@ -1,6 +1,6 @@
 #pragma once
 #include "..\common\interfaces.h"
-#include "Field.h"
+#include "..\common\game\Field.h"
 
 class Player : public IPlayer
 {

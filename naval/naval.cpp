@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include "Game.h"
 #include "Player.h"
-#include "Strategy.h"
+#include "..\common\game\Strategy.h"
 
 int main()
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "..\common\interfaces.h"
+#include "..\interfaces.h"
 #include <vector>
 #include <set>
 //----------------------------------------------------------------------
@@ -64,4 +64,16 @@ protected:
 	bool m_is_use_next_shot;
 	std::pair<int, int> m_next_shot;
 	std::pair<int, int> m_previous_good_shot;
+};
+//----------------------------------------------------------------------
+//Human
+class HumanStrategy :
+	public IStrategy
+{
+public:
+	HumanStrategy();
+	// Inherited via IStrategy
+	virtual void Init() override;
+	virtual void Shot(int& o_ver, int& o_hor) override;
+	virtual void Correct(int ver, int hor, AttackResult res) override;
 };
