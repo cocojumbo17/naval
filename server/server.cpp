@@ -24,12 +24,20 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc != 2)
+	{
+		std::cout << "ERROR: Incorrec format. Should be: server.exe <port>";
+		return 0;
+	}
+	int port = atoi(argv[1]);
+
 	srand((unsigned int)time(NULL));
 
 	std::cout << "\tNaval Server\n" << std::endl;
-	MultyClientServer server(MAX_CLIENTS, PORT);
+	MultyClientServer server(MAX_CLIENTS, port);
+//	MultyClientServer server(MAX_CLIENTS, PORT);
 	// Initialize winsock and start listening
 	server.StartServer();
 	// Loop forever

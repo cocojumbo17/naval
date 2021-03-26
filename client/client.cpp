@@ -8,13 +8,21 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc != 3)
+	{
+		std::cout << "ERROR: Incorrec format. Should be: client.exe <serverIP> <server port>";
+		return 0;
+	}
+	std::string adress = argv[1];
+	int port = atoi(argv[2]);
 	srand((unsigned int)time(NULL));
 
 	//char buffer[BUFFER_SIZE];
 	std::cout << "\t\tNaval Client\n\n";
-	NavalClient client(SERVER_ADRESS, PORT);
+	NavalClient client(adress.c_str(), port);
+//	NavalClient client(SERVER_ADRESS, PORT);
 	client.StartClient();
 	client.InitPlayer();
 	bool looping = true;
